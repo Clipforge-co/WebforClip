@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediaStack — AI Content Systems Agency</title>
+<meta name="description" content="We turn your long-form content into 20+ short-form assets every month. Fully edited, captioned, and ready to post. Trusted by founders and creators across the US, UK, UAE and India.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#fafaf8;--bg2:#f3f2ee;--bg3:#e8e6df;
+  --ink:#18181b;--ink2:#52525b;--ink3:#a1a1aa;
+  --line:#e4e4e7;--line2:#d4d4d8;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-bd:#bbf7d0;
+  --gold:#92661c;--red:#dc2626;
+  --r:10px;--max:1080px;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit;outline:none}
+img{display:block;max-width:100%}
+
+/* ── LAYOUT ── */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 1.5rem}
+sec{display:block;padding:6rem 0}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;display:block}
+.ttl{font-family:'Instrument Serif',serif;font-size:clamp(1.9rem,4vw,2.9rem);font-weight:400;line-height:1.13;color:var(--ink);margin-bottom:.9rem}
+.ttl em{font-style:italic;color:var(--gold)}
+.sub{font-size:.975rem;color:var(--ink2);max-width:500px;line-height:1.78}
+
+/* ── NAV ── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(250,250,248,.93);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid transparent;transition:border-color .25s var(--ease)}
+#nav.on{border-color:var(--line)}
+.nav-in{max-width:var(--max);margin:0 auto;padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--ink);display:flex;align-items:center;gap:.35rem;cursor:pointer}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.nav-ul{display:flex;align-items:center;gap:1.75rem;list-style:none}
+.nav-ul a{font-size:.8rem;color:var(--ink2);transition:color .15s}
+.nav-ul a:hover{color:var(--ink)}
+.btn-nav{font-size:.8rem;font-weight:500;background:var(--ink);color:#fff;padding:.48rem 1.15rem;border-radius:999px;border:none;cursor:pointer;transition:opacity .18s;white-space:nowrap}
+.btn-nav:hover{opacity:.8}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.4rem;border:none;background:none;border-radius:6px}
+.ham span{display:block;width:21px;height:1.5px;background:var(--ink);border-radius:2px;transition:all .28s var(--ease)}
+.ham.x span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham.x span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham.x span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mob-menu{display:none;position:fixed;inset:0;top:60px;background:var(--bg);z-index:400;padding:2rem 1.5rem;flex-direction:column;gap:1.25rem;overflow-y:auto}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:1.05rem;color:var(--ink);padding-bottom:1rem;border-bottom:1px solid var(--line)}
+.mob-menu .btn-nav{width:100%;padding:.75rem;text-align:center;font-size:.9rem;border-radius:999px}
+
+/* ── HERO ── */
+#hero{padding:9.5rem 0 5.5rem;text-align:center}
+.hero-pill{display:inline-flex;align-items:center;gap:.45rem;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);background:var(--green-bg);border:1px solid var(--green-bd);padding:.28rem .85rem;border-radius:999px;margin-bottom:1.75rem}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2.2s ease infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+#hero h1{font-family:'Instrument Serif',serif;font-size:clamp(2.4rem,6vw,4.5rem);font-weight:400;line-height:1.09;letter-spacing:-.01em;color:var(--ink);max-width:800px;margin:0 auto 1.4rem}
+#hero h1 em{font-style:italic;color:var(--gold)}
+#hero .hero-p{font-size:1.025rem;color:var(--ink2);max-width:500px;margin:0 auto 2.25rem;line-height:1.78}
+.hero-btns{display:flex;align-items:center;justify-content:center;gap:.85rem;flex-wrap:wrap;margin-bottom:3.25rem}
+.btn-p{display:inline-flex;align-items:center;gap:.45rem;background:var(--ink);color:#fff;padding:.72rem 1.6rem;border-radius:999px;font-size:.875rem;font-weight:500;border:none;cursor:pointer;transition:opacity .18s}
+.btn-p:hover{opacity:.8}
+.btn-o{display:inline-flex;align-items:center;gap:.45rem;background:transparent;color:var(--ink);padding:.72rem 1.6rem;border-radius:999px;font-size:.875rem;border:1.5px solid var(--line2);cursor:pointer;transition:border-color .18s}
+.btn-o:hover{border-color:var(--ink2)}
+.stats{display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat strong{display:block;font-family:'Instrument Serif',serif;font-size:1.6rem;font-weight:400;line-height:1;color:var(--ink)}
+.stat span{font-size:.72rem;color:var(--ink3);letter-spacing:.04em}
+.sdiv{width:1px;height:34px;background:var(--line2)}
+
+/* ── TRUST ── */
+#trust{padding:1.75rem 0;background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.trust-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1.75rem}
+.tb{display:flex;align-items:center;gap:.45rem;font-size:.78rem;color:var(--ink2)}
+.tb svg{width:14px;height:14px;color:var(--green);flex-shrink:0}
+
+/* ── HOW WE HELP ── */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3.25rem;align-items:start}
+.hvisual{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:1.6rem;display:flex;flex-direction:column;gap:.7rem}
+.fstep{display:flex;gap:.85rem;align-items:flex-start;padding:.85rem;background:var(--bg);border:1px solid var(--line);border-radius:var(--r)}
+.fstep.hl{background:var(--green-bg);border-color:var(--green-bd)}
+.fnum{width:29px;height:29px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;flex-shrink:0}
+.fstep.hl .fnum{background:var(--green)}
+.fbody h4{font-size:.855rem;font-weight:500;margin-bottom:.12rem}
+.fbody p{font-size:.775rem;color:var(--ink2);line-height:1.55}
+.farrow{text-align:center;font-size:.8rem;color:var(--ink3)}
+.hlist{display:flex;flex-direction:column;gap:1.4rem}
+.hi{display:flex;gap:.9rem;align-items:flex-start}
+.hico{width:38px;height:38px;border-radius:var(--r);border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+.hi h3{font-size:.92rem;font-weight:500;margin-bottom:.18rem}
+.hi p{font-size:.835rem;color:var(--ink2);line-height:1.65}
+
+/* ── RESULTS ── */
+#results{background:var(--bg2)}
+.rcards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.75rem}
+.rc{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:1.4rem;transition:border-color .2s,transform .22s;box-shadow:var(--shadow)}
+.rc:hover{border-color:var(--line2);transform:translateY(-2px)}
+.rtag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:.7rem}
+.rnum{font-family:'Instrument Serif',serif;font-size:2.3rem;font-weight:400;color:var(--green);line-height:1;margin-bottom:.2rem}
+.rc h3{font-size:.92rem;font-weight:500;margin-bottom:.35rem}
+.rc p{font-size:.8rem;color:var(--ink2);line-height:1.65}
+.ba{display:flex;margin-top:.9rem;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.bas{flex:1;padding:.55rem .7rem}
+.bas:first-child{border-right:1px solid var(--line)}
+.balbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem}
+.balbl.r{color:var(--red)}.balbl.g{color:var(--green)}
+.baval{font-size:.8rem;font-weight:500;color:var(--ink)}
+
+/* ── SERVICES ── */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.75rem}
+.plan{border:1px solid var(--line);border-radius:16px;padding:1.6rem;background:var(--bg);display:flex;flex-direction:column;gap:.9rem;position:relative;transition:border-color .2s;box-shadow:var(--shadow)}
+.plan:hover{border-color:var(--line2)}
+.plan.feat{border:2px solid var(--ink)}
+.pbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:10.5px;font-weight:500;padding:.22rem .85rem;border-radius:999px;white-space:nowrap}
+.pname{font-size:.75rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)}
+.pprice{display:flex;align-items:baseline;gap:.25rem}
+.pprice strong{font-family:'Instrument Serif',serif;font-size:2.3rem;font-weight:400;color:var(--ink)}
+.pprice span{font-size:.78rem;color:var(--ink3)}
+.pdesc{font-size:.825rem;color:var(--ink2);line-height:1.65;padding-bottom:.7rem;border-bottom:1px solid var(--line)}
+.pfeats{list-style:none;display:flex;flex-direction:column;gap:.55rem;flex:1}
+.pfeats li{font-size:.82rem;color:var(--ink2);display:flex;gap:.45rem;align-items:flex-start;line-height:1.5}
+.pfeats li::before{content:'✓';color:var(--green);font-size:.7rem;margin-top:.15rem;flex-shrink:0}
+.pcta{margin-top:auto;display:block;text-align:center;padding:.7rem;border-radius:999px;font-size:.83rem;font-weight:500;cursor:pointer;transition:all .18s;border:none;width:100%}
+.pcta.dk{background:var(--ink);color:#fff}.pcta.dk:hover{opacity:.8}
+.pcta.lt{background:transparent;color:var(--ink);border:1.5px solid var(--line2)}.pcta.lt:hover{border-color:var(--ink)}
+
+/* ── ABOUT ── */
+#about{background:var(--bg2)}
+.agrid{display:grid;grid-template-columns:280px 1fr;gap:3.5rem;align-items:start;margin-top:3rem}
+.acard{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:1.75rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1rem;box-shadow:var(--shadow)}
+.aav{width:76px;height:76px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:1.7rem;flex-shrink:0}
+.acard h3{font-family:'Instrument Serif',serif;font-size:1.3rem;font-weight:400}
+.acard .role{font-size:.775rem;color:var(--ink3)}
+.social-links{display:flex;flex-direction:column;gap:.45rem;width:100%;margin-top:.35rem}
+.social-link{display:flex;align-items:center;gap:.55rem;padding:.55rem .75rem;background:var(--bg2);border:1px solid var(--line);border-radius:8px;font-size:.775rem;color:var(--ink2);text-decoration:none;transition:border-color .18s,color .18s}
+.social-link:hover{border-color:var(--line2);color:var(--ink)}
+.social-link svg{width:14px;height:14px;flex-shrink:0;color:var(--ink3)}
+.abadges{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;margin-top:.25rem}
+.abadge{font-size:.7rem;background:var(--bg2);border:1px solid var(--line);color:var(--ink2);padding:.18rem .55rem;border-radius:4px}
+.acontent h2{font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:.9rem}
+.acontent h2 em{font-style:italic;color:var(--gold)}
+.acontent p{font-size:.9rem;color:var(--ink2);line-height:1.8;margin-bottom:.9rem}
+.avals{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.25rem}
+.aval{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:.85rem}
+.aval h4{font-size:.83rem;font-weight:500;margin-bottom:.2rem}
+.aval p{font-size:.775rem;color:var(--ink2);line-height:1.55}
+
+/* ── PROCESS ── */
+.ptrack{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:3.25rem;position:relative}
+.ptrack::before{content:'';position:absolute;top:19px;left:10%;right:10%;height:1px;background:var(--line2);z-index:0}
+.pstep{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.85rem;padding:0 .4rem;position:relative;z-index:1}
+.pdot{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line2);background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink3);transition:all .25s}
+.pdot.a{background:var(--ink);border-color:var(--ink);color:#fff}
+.pstep h4{font-size:.82rem;font-weight:500}
+.pstep p{font-size:.76rem;color:var(--ink2);line-height:1.55}
+
+/* ── TESTIMONIALS ── */
+#testimonials{background:var(--bg2)}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.75rem}
+.tc{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:1.4rem;display:flex;flex-direction:column;gap:.9rem;box-shadow:var(--shadow)}
+.tstars{color:#f59e0b;font-size:.8rem;letter-spacing:.06em}
+.ttext{font-size:.845rem;color:var(--ink2);line-height:1.78;flex:1}
+.tauth{display:flex;align-items:center;gap:.7rem;padding-top:.9rem;border-top:1px solid var(--line)}
+.tav{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;flex-shrink:0}
+.tname{font-size:.83rem;font-weight:500}
+.trole{font-size:.72rem;color:var(--ink3)}
+
+/* ── FAQ ── */
+.faq-wrap{max-width:680px;margin:2.75rem auto 0;display:flex;flex-direction:column;gap:.65rem}
+.fi{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+.fi:hover{border-color:var(--line2)}
+.fq{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.15rem;background:none;border:none;cursor:pointer;text-align:left;font-size:.9rem;font-weight:500;color:var(--ink);transition:background .18s}
+.fq:hover{background:var(--bg2)}
+.fq svg{width:15px;height:15px;flex-shrink:0;color:var(--ink3);transition:transform .3s var(--ease)}
+.fq.open svg{transform:rotate(45deg)}
+.fa{height:0;overflow:hidden;transition:height .33s var(--ease)}
+.fa-in{padding:.15rem 1.15rem 1rem;font-size:.855rem;color:var(--ink2);line-height:1.78}
+
+/* ── BOOKING (dark) ── */
+#booking{background:var(--ink);color:#fff;padding:6rem 0}
+#booking .lbl{color:#6ee7b7}
+#booking .ttl{color:#fff}
+#booking .ttl em{color:#fcd34d}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:3.75rem;margin-top:2.75rem;align-items:start}
+.binfo p{font-size:.9rem;color:rgba(255,255,255,.62);line-height:1.78;margin-bottom:1.5rem}
+.bperks{display:flex;flex-direction:column;gap:.7rem}
+.bperk{display:flex;align-items:flex-start;gap:.65rem;font-size:.855rem;color:rgba(255,255,255,.72)}
+.bperk svg{width:15px;height:15px;color:#6ee7b7;flex-shrink:0;margin-top:.25rem}
+.bbox{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);border-radius:16px;padding:1.85rem}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.fld{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.9rem}
+.fld label{font-size:.775rem;font-weight:500;color:rgba(255,255,255,.68)}
+.fld input,.fld select,.fld textarea{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.65rem .85rem;font-size:.875rem;color:#fff;transition:border-color .18s;width:100%}
+.fld input::placeholder,.fld textarea::placeholder{color:rgba(255,255,255,.28)}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:rgba(255,255,255,.38)}
+.fld select option{background:#18181b;color:#fff}
+.fld textarea{resize:vertical;min-height:88px}
+.fnote{font-size:.73rem;color:rgba(255,255,255,.38);margin-bottom:.9rem;line-height:1.6}
+.bsub{width:100%;padding:.82rem;background:#fff;color:var(--ink);border:none;border-radius:999px;font-size:.875rem;font-weight:500;cursor:pointer;transition:opacity .18s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.bsub:hover{opacity:.88}
+.bsub:disabled{opacity:.48;cursor:not-allowed}
+.spin{width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;display:none;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.inline-err{display:none;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.35);border-radius:8px;padding:.65rem .9rem;font-size:.8rem;color:#fca5a5;margin-bottom:.9rem;line-height:1.6}
+.form-ok{display:none;flex-direction:column;align-items:center;text-align:center;gap:.9rem;padding:2rem 1rem}
+.form-ok svg{width:44px;height:44px;color:#6ee7b7}
+.form-ok h3{font-size:1.1rem;font-weight:500;color:#fff}
+.form-ok p{font-size:.855rem;color:rgba(255,255,255,.6);line-height:1.7;max-width:320px}
+
+/* ── CONTACT ── */
+#contact{background:var(--bg2)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:3.75rem;margin-top:2.75rem;align-items:start}
+.cinfo h3{font-family:'Instrument Serif',serif;font-size:1.4rem;font-weight:400;margin-bottom:.65rem}
+.cinfo p{font-size:.875rem;color:var(--ink2);line-height:1.78;margin-bottom:1.25rem}
+.cmethods{display:flex;flex-direction:column;gap:.65rem}
+.cm{display:flex;align-items:center;gap:.6rem;font-size:.84rem;color:var(--ink2)}
+.cm svg{width:15px;height:15px;color:var(--green);flex-shrink:0}
+.cm a{color:var(--ink2);transition:color .15s}.cm a:hover{color:var(--ink);text-decoration:underline}
+.ccard{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:1.75rem;box-shadow:var(--shadow)}
+.ccard .fld label{color:var(--ink2)}
+.ccard .fld input,.ccard .fld textarea,.ccard .fld select{background:var(--bg);border:1px solid var(--line);color:var(--ink)}
+.ccard .fld input::placeholder,.ccard .fld textarea::placeholder{color:var(--ink3)}
+.ccard .fld input:focus,.ccard .fld textarea:focus,.ccard .fld select:focus{border-color:var(--line2)}
+.ccard .inline-err{background:rgba(220,38,38,.06);border-color:rgba(220,38,38,.25);color:var(--red)}
+.csub{width:100%;padding:.78rem;background:var(--ink);color:#fff;border:none;border-radius:999px;font-size:.855rem;font-weight:500;cursor:pointer;transition:opacity .18s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.csub:hover{opacity:.82}
+.csub:disabled{opacity:.45;cursor:not-allowed}
+.cspin{width:13px;height:13px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.contact-ok{display:none;flex-direction:column;align-items:center;text-align:center;gap:.8rem;padding:1.5rem .5rem}
+.contact-ok svg{width:36px;height:36px;color:var(--green)}
+.contact-ok h4{font-size:.975rem;font-weight:500}
+.contact-ok p{font-size:.82rem;color:var(--ink2);line-height:1.7}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--line);padding:2.25rem 0}
+.foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem}
+.flogo{font-family:'Instrument Serif',serif;font-size:1.1rem;display:flex;align-items:center;gap:.3rem}
+.flogo-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.flinks{display:flex;gap:1.5rem}
+.flinks a{font-size:.78rem;color:var(--ink3);transition:color .15s}.flinks a:hover{color:var(--ink)}
+.copy{font-size:.73rem;color:var(--ink3)}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .58s var(--ease),transform .58s var(--ease)}
+.rv.vis{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:920px){
+  .hgrid,.agrid,.bgrid,.cgrid{grid-template-columns:1fr}
+  .rcards,.plans,.tgrid{grid-template-columns:1fr}
+  .ptrack{grid-template-columns:1fr 1fr;gap:1.5rem}
+  .ptrack::before{display:none}
+  .nav-ul,.nav-right-d{display:none}
+  .ham{display:flex}
+  .frow{grid-template-columns:1fr}
+  .avals{grid-template-columns:1fr}
+  .agrid{grid-template-columns:1fr}
+  .acard{max-width:340px;margin:0 auto}
+}
+@media(max-width:560px){
+  sec{padding:4rem 0}
+  #hero{padding:7.5rem 0 4rem}
+  .ptrack{grid-template-columns:1fr}
+  .stats{gap:.75rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header id="nav">
+  <div class="nav-in">
+    <a href="#hero" class="logo" onclick="return sScroll('#hero')">
+      <span class="logo-dot"></span>MediaStack
+    </a>
+    <nav>
+      <ul class="nav-ul">
+        <li><a href="#help"  onclick="return sScroll('#help')">How it works</a></li>
+        <li><a href="#results" onclick="return sScroll('#results')">Results</a></li>
+        <li><a href="#services" onclick="return sScroll('#services')">Pricing</a></li>
+        <li><a href="#about" onclick="return sScroll('#about')">About</a></li>
+        <li><a href="#faq"   onclick="return sScroll('#faq')">FAQ</a></li>
+      </ul>
+    </nav>
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <button class="btn-nav nav-right-d" onclick="sScroll('#booking')">Book a free call</button>
+      <button class="ham" id="ham" aria-label="Menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="#help"      onclick="closeMenu();sScroll('#help');return false">How it works</a>
+  <a href="#results"   onclick="closeMenu();sScroll('#results');return false">Results</a>
+  <a href="#services"  onclick="closeMenu();sScroll('#services');return false">Pricing</a>
+  <a href="#about"     onclick="closeMenu();sScroll('#about');return false">About</a>
+  <a href="#faq"       onclick="closeMenu();sScroll('#faq');return false">FAQ</a>
+  <a href="#contact"   onclick="closeMenu();sScroll('#contact');return false">Contact</a>
+  <button class="btn-nav" onclick="closeMenu();sScroll('#booking')">Book a free call →</button>
+</div>
+
+<!-- HERO -->
+<sec id="hero">
+  <div class="wrap">
+    <div class="hero-pill"><span class="hero-dot"></span>Now accepting new clients — June 2025</div>
+    <h1>Your content is valuable.<br>Most people never <em>see it.</em></h1>
+    <p class="hero-p">We turn your long-form videos, podcasts, and webinars into 20+ short-form assets every month — fully edited, captioned, and platform-ready. You keep creating. We handle the rest.</p>
+    <div class="hero-btns">
+      <button class="btn-p" onclick="sScroll('#booking')">
+        Book a free 30-min call
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+      <button class="btn-o" onclick="sScroll('#results')">See real results →</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>47+</strong><span>Clients served</span></div>
+      <div class="sdiv"></div>
+      <div class="stat"><strong>3,800+</strong><span>Videos delivered</span></div>
+      <div class="sdiv"></div>
+      <div class="stat"><strong>98%</strong><span>Retention rate</span></div>
+      <div class="sdiv"></div>
+      <div class="stat"><strong>5 days</strong><span>First delivery</span></div>
+    </div>
+  </div>
+</sec>
+
+<!-- TRUST BAR -->
+<div id="trust">
+  <div class="wrap">
+    <div class="trust-row">
+      <div class="tb">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L9.8 6.2l4.2.6-3 2.9.7 4.3L8 11.8 4.3 14l.7-4.3-3-2.9 4.2-.6z"/></svg>
+        Trusted by US, UK, UAE &amp; India founders
+      </div>
+      <div class="tb">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M2 7h12"/></svg>
+        Secure payments — Wise &amp; Razorpay
+      </div>
+      <div class="tb">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 4L6 11 3 8"/></svg>
+        Signed contract on every project
+      </div>
+      <div class="tb">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+        First delivery in 5 business days
+      </div>
+      <div class="tb">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zm0 0v6l3 2"/></svg>
+        Reply within 4 hours (IST business hours)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW WE HELP -->
+<sec id="help">
+  <div class="wrap">
+    <span class="lbl rv">How we help</span>
+    <h2 class="ttl rv d1">You create once. We <em>multiply</em> it.</h2>
+    <p class="sub rv d2">Most founders sit on a goldmine of long-form content — podcasts, webinars, YouTube videos — that almost nobody sees. We extract the best moments and distribute them everywhere.</p>
+    <div class="hgrid">
+      <div class="hvisual rv">
+        <div class="fstep hl">
+          <div class="fnum">01</div>
+          <div class="fbody"><h4>You upload raw content</h4><p>Drop a podcast, webinar, or YouTube video into your shared folder. That's it.</p></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep">
+          <div class="fnum">02</div>
+          <div class="fbody"><h4>We extract the gold</h4><p>AI-assisted clip selection finds the 6–10 best moments. Manually refined for quality.</p></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep">
+          <div class="fnum">03</div>
+          <div class="fbody"><h4>Captions, titles, thumbnails</h4><p>Animated captions, 3 title options, and a custom thumbnail for every clip.</p></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep hl">
+          <div class="fnum">04</div>
+          <div class="fbody"><h4>Ready to post in 5 days</h4><p>Assets in your Notion portal — formatted for Reels, TikTok, Shorts, and LinkedIn.</p></div>
+        </div>
+      </div>
+      <div class="hlist rv d1">
+        <div class="hi">
+          <div class="hico">🎬</div>
+          <div><h3>Short-form video editing</h3><p>Every clip is hand-edited for pacing, music, and hook structure so viewers actually stay till the end.</p></div>
+        </div>
+        <div class="hi">
+          <div class="hico">✏️</div>
+          <div><h3>Captions that stand out</h3><p>Animated, styled captions in your brand's colors. 85% of Reels are watched on mute — captions aren't optional.</p></div>
+        </div>
+        <div class="hi">
+          <div class="hico">🎯</div>
+          <div><h3>Hook writing &amp; titles</h3><p>3 title and hook variations per clip, written based on what's actually driving views in your niche.</p></div>
+        </div>
+        <div class="hi">
+          <div class="hico">📊</div>
+          <div><h3>Monthly performance report</h3><p>Every month you see what performed, what didn't, and what we're changing. No guesswork.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- RESULTS -->
+<sec id="results">
+  <div class="wrap">
+    <span class="lbl rv">Real results</span>
+    <h2 class="ttl rv d1">What happens when <em>it works</em></h2>
+    <p class="sub rv d2">Every number below came from a real client. No vanity metrics — only things that mattered to their business.</p>
+    <div class="rcards">
+      <div class="rc rv">
+        <div class="rtag">SaaS Founder · Austin, US</div>
+        <div class="rnum">+840%</div>
+        <h3>Reach increase in 60 days</h3>
+        <p>Turned a weekly podcast into 18 cross-platform clips. 250 views → 2,100 per episode. 4 inbound leads from LinkedIn content alone.</p>
+        <div class="ba">
+          <div class="bas"><div class="balbl r">Before</div><div class="baval">1 post/wk · 250 views</div></div>
+          <div class="bas"><div class="balbl g">After</div><div class="baval">18 clips · 2,100 views avg</div></div>
+        </div>
+      </div>
+      <div class="rc rv d1">
+        <div class="rtag">PropTech CEO · London, UK</div>
+        <div class="rnum">14,200</div>
+        <h3>New LinkedIn followers in 5 months</h3>
+        <p>Webinars getting 12 live viewers → repurposed into 4 LinkedIn videos/week. 22 inbound demo requests per month from content.</p>
+        <div class="ba">
+          <div class="bas"><div class="balbl r">Before</div><div class="baval">800 followers · 0 leads</div></div>
+          <div class="bas"><div class="balbl g">After</div><div class="baval">14.2k followers · 22 demos/mo</div></div>
+        </div>
+      </div>
+      <div class="rc rv d2">
+        <div class="rtag">Finance Creator · Melbourne, AU</div>
+        <div class="rnum">$8,400</div>
+        <h3>New sponsorship revenue monthly</h3>
+        <p>22% average watch retention → 68% after we rebuilt hook structure and thumbnails. Sponsors took notice within 6 weeks.</p>
+        <div class="ba">
+          <div class="bas"><div class="balbl r">Before</div><div class="baval">22% retention · no sponsors</div></div>
+          <div class="bas"><div class="balbl g">After</div><div class="baval">68% retention · $8.4k/mo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- SERVICES -->
+<sec id="services">
+  <div class="wrap">
+    <span class="lbl rv">Pricing</span>
+    <h2 class="ttl rv d1">Simple monthly <em>retainers</em></h2>
+    <p class="sub rv d2">No hidden fees, no per-video charges. Flat monthly pricing so you can plan ahead. Cancel with 30 days notice anytime.</p>
+    <div class="plans">
+      <div class="plan rv">
+        <div class="pname">Starter</div>
+        <div class="pprice"><strong>$900</strong><span>/ month</span></div>
+        <p class="pdesc">For creators just starting with consistent short-form content output.</p>
+        <ul class="pfeats">
+          <li>4 long-form videos repurposed</li>
+          <li>16 short clips (9:16 format)</li>
+          <li>Animated captions on all clips</li>
+          <li>Formatted for Reels, TikTok, Shorts</li>
+          <li>1 revision round per batch</li>
+          <li>Notion delivery portal</li>
+          <li>Monthly performance report</li>
+        </ul>
+        <button class="pcta lt" onclick="prefillAndScroll('Starter — $900/mo')">Get started →</button>
+      </div>
+      <div class="plan feat rv d1">
+        <span class="pbadge">Most popular</span>
+        <div class="pname">Growth</div>
+        <div class="pprice"><strong>$1,800</strong><span>/ month</span></div>
+        <p class="pdesc">For founders scaling their personal brand with strategy + full execution.</p>
+        <ul class="pfeats">
+          <li>8 long-form videos repurposed</li>
+          <li>32 short clips across all platforms</li>
+          <li>Hook writing — 3 options per clip</li>
+          <li>Custom thumbnail per clip</li>
+          <li>Title &amp; description copy</li>
+          <li>Monthly content calendar</li>
+          <li>30-min strategy call each month</li>
+          <li>Priority 24-hour turnaround</li>
+        </ul>
+        <button class="pcta dk" onclick="prefillAndScroll('Growth — $1,800/mo')">Start growing →</button>
+      </div>
+      <div class="plan rv d2">
+        <div class="pname">Scale</div>
+        <div class="pprice"><strong>$3,500</strong><span>/ month</span></div>
+        <p class="pdesc">Full white-glove content operation for serious brands and agencies.</p>
+        <ul class="pfeats">
+          <li>Unlimited repurposing</li>
+          <li>Script outlines &amp; topic research</li>
+          <li>Full AI-powered content pipeline</li>
+          <li>Dedicated project manager</li>
+          <li>Weekly performance review call</li>
+          <li>Competitor content analysis</li>
+          <li>Faceless channel option (AI voice)</li>
+          <li>Custom brand motion graphics</li>
+        </ul>
+        <button class="pcta lt" onclick="prefillAndScroll('Scale — $3,500/mo')">Let's talk →</button>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- ABOUT -->
+<sec id="about">
+  <div class="wrap">
+    <span class="lbl rv">About</span>
+    <div class="agrid">
+      <div class="rv">
+        <div class="acard">
+          <div class="aav">SG</div>
+          <h3>Sujit Gupta</h3>
+          <span class="role">Founder &amp; Lead Strategist · MediaStack</span>
+          <div class="abadges">
+            <span class="abadge">B.Tech Student</span>
+            <span class="abadge">India</span>
+            <span class="abadge">47+ clients</span>
+            <span class="abadge">Global delivery</span>
+          </div>
+          <div class="social-links">
+            <a href="mailto:sujitgupta1347@gmail.com" class="social-link">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M2 5l6 4 6-4"/></svg>
+              sujitgupta1347@gmail.com
+            </a>
+            <a href="tel:+918175993990" class="social-link">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 10.5c0 .4-.1.8-.3 1.1-.2.4-.5.7-.9.9-.6.3-1.2.4-1.8.4-1 0-2.3-.4-3.7-1.2-1.2-.7-2.3-1.7-3.2-3-.9-1.3-1.4-2.5-1.4-3.6 0-.6.1-1.1.4-1.6.3-.5.7-.9 1.2-1.1.5-.2.9-.1 1.2.1l1.4 1.9c.2.2.3.5.3.7 0 .3-.2.6-.5 1l-.4.4c.3.5.7 1 1.3 1.5.5.5 1.1.9 1.6 1.2l.4-.4c.3-.3.6-.5 1-.5.2 0 .4.1.6.2l1.9 1.2c.3.3.5.6.4.9z"/></svg>
+              +91 8175993990
+            </a>
+            <a href="https://instagram.com/mediaStack.co" target="_blank" rel="noopener" class="social-link">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="3.5"/><circle cx="8" cy="8" r="2.5"/><circle cx="11.5" cy="4.5" r=".6" fill="currentColor" stroke="none"/></svg>
+              @mediaStack.co
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="acontent rv d1">
+        <h2>I built this so <em>great content</em> stops being invisible.</h2>
+        <p>I'm a B.Tech student who got obsessed with one problem: founders and creators with brilliant ideas were posting once a week and reaching almost nobody — not because their content was bad, but because they only had time to post it once.</p>
+        <p>I built MediaStack to solve exactly that. We use AI-assisted workflows to extract the best moments from your content and push them everywhere — so you focus on the one-hour recording, and we handle the 20 posts that come from it.</p>
+        <p>Every client gets a dedicated Notion workspace, a formal service agreement, and direct communication with me — not an account manager. I work with founders in the US, UK, UAE, and India, and I've delivered over 3,800 videos on time with a 98% retention rate.</p>
+        <div class="avals">
+          <div class="aval"><h4>Transparency first</h4><p>You see everything — every clip, every decision, every performance number, every month.</p></div>
+          <div class="aval"><h4>Systems, not chaos</h4><p>Every client has a documented workflow. Nothing depends on one person's memory.</p></div>
+          <div class="aval"><h4>Results or we fix it</h4><p>If a batch doesn't meet our bar, we redo it — no questions, no extra charge.</p></div>
+          <div class="aval"><h4>Long-term thinking</h4><p>I'm not here for a 1-month sprint. I build retainers designed to grow with your brand.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- PROCESS -->
+<sec id="process">
+  <div class="wrap">
+    <span class="lbl rv" style="text-align:center;display:block">The process</span>
+    <h2 class="ttl rv d1" style="text-align:center">From sign-up to <em>first delivery</em></h2>
+    <div class="ptrack">
+      <div class="pstep rv">
+        <div class="pdot a">01</div>
+        <h4>Discovery call</h4>
+        <p>30-min free call. We map your content, goals, and audience together.</p>
+      </div>
+      <div class="pstep rv d1">
+        <div class="pdot">02</div>
+        <h4>Brand kit setup</h4>
+        <p>Fill a simple form. We document your fonts, colors, tone, and style guide.</p>
+      </div>
+      <div class="pstep rv d1">
+        <div class="pdot">03</div>
+        <h4>Contract &amp; payment</h4>
+        <p>Digital contract signed. 50% upfront via Wise, Razorpay, or bank transfer.</p>
+      </div>
+      <div class="pstep rv d2">
+        <div class="pdot">04</div>
+        <h4>First batch delivered</h4>
+        <p>Within 5 business days. You approve or request revisions. We refine.</p>
+      </div>
+      <div class="pstep rv d2">
+        <div class="pdot">05</div>
+        <h4>Monthly rhythm</h4>
+        <p>You upload raw content. We deliver edited assets. Monthly report. Repeat.</p>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- TESTIMONIALS -->
+<sec id="testimonials">
+  <div class="wrap">
+    <span class="lbl rv">What clients say</span>
+    <h2 class="ttl rv d1">Real words from <em>real clients</em></h2>
+    <div class="tgrid">
+      <div class="tc rv">
+        <div class="tstars">★★★★★</div>
+        <p class="ttext">"Sujit's team transformed my podcast into a full content machine. I went from posting once a week to having 20+ assets from every episode. The quality is consistently high and turnaround is faster than any agency I've worked with."</p>
+        <div class="tauth">
+          <div class="tav" style="background:#f0fdf4;color:#16a34a">MT</div>
+          <div><div class="tname">Marcus T.</div><div class="trole">SaaS Founder · Austin, TX</div></div>
+        </div>
+      </div>
+      <div class="tc rv d1">
+        <div class="tstars">★★★★★</div>
+        <p class="ttext">"I was sceptical about working with an agency based in India but the communication was flawless and results speak for themselves — 14k LinkedIn followers in 5 months. Sujit feels like a real business partner, not a vendor."</p>
+        <div class="tauth">
+          <div class="tav" style="background:#eff6ff;color:#1d4ed8">PM</div>
+          <div><div class="tname">Priya M.</div><div class="trole">CEO · PropTech · London, UK</div></div>
+        </div>
+      </div>
+      <div class="tc rv d2">
+        <div class="tstars">★★★★★</div>
+        <p class="ttext">"The before/after on my retention curve alone justifies the full cost. My channel went from dying to monetised in 4 months. Sujit is also one of the most responsive people I've worked with — responds within hours, every time."</p>
+        <div class="tauth">
+          <div class="tav" style="background:#fefce8;color:#a16207">DK</div>
+          <div><div class="tname">Daniel K.</div><div class="trole">Finance Creator · Melbourne, AU</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- FAQ -->
+<sec id="faq">
+  <div class="wrap">
+    <span class="lbl rv" style="text-align:center;display:block">FAQ</span>
+    <h2 class="ttl rv d1" style="text-align:center">Questions we always <em>get asked</em></h2>
+    <div class="faq-wrap">
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">How long does the first batch take?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">We deliver your first batch within 5 business days of receiving your raw content and approved brand kit. Subsequent batches follow a rolling monthly schedule agreed during onboarding.</div></div>
+      </div>
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">What format do I need to send my content in?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">Any format works — MP4, MOV, AVI, or even a YouTube or Google Drive link. You'll get a shared folder where you simply drop files. No technical knowledge needed on your end.</div></div>
+      </div>
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">Can I cancel anytime?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">Yes. All retainers require 30 days' written notice to cancel. No long-term lock-ins. That said, content results compound — clients who stay 6+ months consistently see the biggest returns.</div></div>
+      </div>
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">How do I pay? What currencies do you accept?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">We accept USD, GBP, AED, AUD, and INR. International clients pay via Wise (real exchange rates) or bank transfer. Indian clients can pay via Razorpay or bank transfer. We invoice on the 1st of each month. 50% upfront on the first month.</div></div>
+      </div>
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">Do you sign a contract?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">Always. Every engagement comes with a formal service agreement outlining deliverables, timelines, revision policy, payment terms, and IP ownership. You own everything we create for you.</div></div>
+      </div>
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">What if I don't like the edits?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">Every batch includes one full revision round within 7 days of delivery. You submit feedback in your Notion portal and we turn it around within 48 hours. If the first batch misses quality entirely, we redo it free of charge — no questions asked.</div></div>
+      </div>
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">I've had bad experiences with Indian freelancers before. Why is this different?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">Fair concern — I'd rather you ask. The difference is systems. Every client has a documented brand kit, a written SOP, a quality checklist, and a contract. Nothing depends on anyone's memory. I also offer a paid test project so you validate quality before committing to a retainer. Let the work speak first.</div></div>
+      </div>
+
+      <div class="fi rv">
+        <button class="fq" onclick="toggleFaq(this)">Do you work with Indian clients?
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <div class="fa"><div class="fa-in">Yes. We work with EdTech founders, D2C brand founders, coaching businesses, and LinkedIn personal brands across India. Pricing is offered in INR at an equivalent rate. Razorpay and bank transfer accepted.</div></div>
+      </div>
+
+    </div>
+  </div>
+</sec>
+
+<!-- BOOKING -->
+<sec id="booking" style="background:var(--ink);color:#fff">
+  <div class="wrap">
+    <span class="lbl">Book a call</span>
+    <h2 class="ttl">Let's talk about your<br><em>content goals</em></h2>
+    <div class="bgrid">
+      <div class="binfo">
+        <p>This is a free 30-minute call — no pressure. We'll look at your current content, understand your goals, and I'll tell you honestly if we're the right fit. If we are, I'll walk you through what the first month looks like.</p>
+        <div class="bperks">
+          <div class="bperk"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 4L6 11 3 8"/></svg>Free 30-minute strategy session — zero obligation</div>
+          <div class="bperk"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 4L6 11 3 8"/></svg>I'll audit your existing content live on the call</div>
+          <div class="bperk"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 4L6 11 3 8"/></svg>You leave with a clear action plan — even if you don't hire me</div>
+          <div class="bperk"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 4L6 11 3 8"/></svg>Slots available across US, UK, UAE &amp; India time zones</div>
+          <div class="bperk"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 4L6 11 3 8"/></svg>Booking response within 4 hours</div>
+        </div>
+      </div>
+
+      <div class="bbox">
+        <!-- SUCCESS STATE (hidden by default) -->
+        <div class="form-ok" id="bookOk">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="24" r="20"/><path d="M15 24l7 7 11-14"/></svg>
+          <h3>You're booked in!</h3>
+          <p>I'll email you within 4 hours with a calendar link to confirm your slot. Check your spam if you don't hear back — or WhatsApp me directly at +91 8175993990.</p>
+        </div>
+
+        <!-- FORM (shown by default) -->
+        <div id="bookForm">
+          <div class="inline-err" id="bookErr"></div>
+          <div class="frow">
+            <div class="fld">
+              <label for="b_name">Your name *</label>
+              <input type="text" id="b_name" placeholder="Jane Smith" autocomplete="name">
+            </div>
+            <div class="fld">
+              <label for="b_email">Email address *</label>
+              <input type="email" id="b_email" placeholder="jane@company.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fld">
+              <label for="b_biz">Business / channel name</label>
+              <input type="text" id="b_biz" placeholder="Acme Inc.">
+            </div>
+            <div class="fld">
+              <label for="b_country">Your country *</label>
+              <select id="b_country">
+                <option value="">Select…</option>
+                <option>United States</option>
+                <option>United Kingdom</option>
+                <option>United Arab Emirates</option>
+                <option>Australia</option>
+                <option>Canada</option>
+                <option>India</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="fld">
+            <label for="b_plan">Which plan interests you?</label>
+            <select id="b_plan">
+              <option value="">Not sure yet — let's talk</option>
+              <option>Starter — $900/mo</option>
+              <option>Growth — $1,800/mo</option>
+              <option>Scale — $3,500/mo</option>
+              <option>Just want to explore</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label for="b_msg">What's your biggest content challenge right now? *</label>
+            <textarea id="b_msg" rows="3" placeholder="E.g. I record a weekly podcast but only post it to YouTube once a week. I want to grow on LinkedIn and Instagram but don't have time to edit everything…"></textarea>
+          </div>
+          <p class="fnote">By submitting you agree to be contacted about your booking. I'll reply within 4 hours (IST 9am–7pm). Your info is never sold or shared.</p>
+          <button class="bsub" id="bookBtn" onclick="submitBooking()">
+            <span id="bookBtnTxt">Book my free call →</span>
+            <span class="spin" id="bookSpin"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- CONTACT -->
+<sec id="contact">
+  <div class="wrap">
+    <span class="lbl rv">Contact</span>
+    <h2 class="ttl rv d1">Prefer to <em>message first?</em></h2>
+    <div class="cgrid">
+      <div class="cinfo rv">
+        <h3>Drop me a message</h3>
+        <p>Not ready for a call yet? Send a message and I'll reply within 24 hours. I read every message personally — no auto-responders.</p>
+        <div class="cmethods">
+          <div class="cm">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M2 5l6 4 6-4"/></svg>
+            <a href="mailto:sujitgupta1347@gmail.com">sujitgupta1347@gmail.com</a>
+          </div>
+          <div class="cm">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="3.5"/><circle cx="8" cy="8" r="2.5"/><circle cx="11.5" cy="4.5" r=".6" fill="currentColor" stroke="none"/></svg>
+            <a href="https://instagram.com/mediaStack.co" target="_blank" rel="noopener">@mediaStack.co</a>
+          </div>
+          <div class="cm">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 10.5c0 .4-.1.8-.3 1.1-.2.4-.5.7-.9.9-.6.3-1.2.4-1.8.4-1 0-2.3-.4-3.7-1.2-1.2-.7-2.3-1.7-3.2-3-.9-1.3-1.4-2.5-1.4-3.6 0-.6.1-1.1.4-1.6.3-.5.7-.9 1.2-1.1.5-.2.9-.1 1.2.1l1.4 1.9c.2.2.3.5.3.7 0 .3-.2.6-.5 1l-.4.4c.3.5.7 1 1.3 1.5.5.5 1.1.9 1.6 1.2l.4-.4c.3-.3.6-.5 1-.5.2 0 .4.1.6.2l1.9 1.2c.3.3.5.6.4.9z"/></svg>
+            <a href="tel:+918175993990">+91 8175993990</a>
+          </div>
+          <div class="cm">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+            Replies within 24 hours — usually much faster
+          </div>
+        </div>
+      </div>
+      <div class="ccard rv d1">
+        <!-- SUCCESS STATE -->
+        <div class="contact-ok" id="contactOk">
+          <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="18" r="15"/><path d="M11 18l5 5 9-10"/></svg>
+          <h4>Message sent!</h4>
+          <p>I'll reply to your email within 24 hours. Thanks for reaching out!</p>
+        </div>
+        <!-- FORM -->
+        <div id="contactForm">
+          <div class="inline-err" id="contactErr"></div>
+          <div class="frow">
+            <div class="fld">
+              <label for="c_name">Name *</label>
+              <input type="text" id="c_name" placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="fld">
+              <label for="c_email">Email *</label>
+              <input type="email" id="c_email" placeholder="you@email.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="fld">
+            <label for="c_subject">Subject</label>
+            <input type="text" id="c_subject" placeholder="What's it about?">
+          </div>
+          <div class="fld">
+            <label for="c_msg">Message *</label>
+            <textarea id="c_msg" rows="4" placeholder="Tell me what you're working on…"></textarea>
+          </div>
+          <button class="csub" id="contactBtn" onclick="submitContact()">
+            <span id="contactBtnTxt">Send message →</span>
+            <span class="cspin" id="contactSpin"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</sec>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <div class="flogo"><span class="flogo-dot"></span>MediaStack</div>
+      <nav class="flinks">
+        <a href="#help"      onclick="return sScroll('#help')">How it works</a>
+        <a href="#services"  onclick="return sScroll('#services')">Pricing</a>
+        <a href="#about"     onclick="return sScroll('#about')">About</a>
+        <a href="#faq"       onclick="return sScroll('#faq')">FAQ</a>
+        <a href="#contact"   onclick="return sScroll('#contact')">Contact</a>
+      </nav>
+      <p class="copy">© 2025 MediaStack · sujitgupta1347@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+   FORMSPREE ENDPOINT
+   Uses Accept: application/json  →  returns JSON, NO redirect.
+   The page NEVER navigates away from the site.
+───────────────────────────────────────────────────────── */
+const FS = 'https://formspree.io/f/xbdbgeza';
+
+/* ── helpers ── */
+const $ = id => document.getElementById(id);
+const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+function showErr(id, msg) {
+  const el = $(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function hideErr(id) { $(id).style.display = 'none'; }
+
+function setLoading(btnId, spinId, txtId, loading, label) {
+  const btn = $(btnId), spin = $(spinId), txt = $(txtId);
+  btn.disabled = loading;
+  spin.style.display = loading ? 'inline-block' : 'none';
+  if (!loading && label) txt.textContent = label;
+  if (loading) txt.textContent = 'Sending…';
+}
+
+/* ── BOOKING FORM ── */
+async function submitBooking() {
+  const name    = $('b_name').value.trim();
+  const email   = $('b_email').value.trim();
+  const country = $('b_country').value;
+  const msg     = $('b_msg').value.trim();
+
+  if (!name)    { showErr('bookErr', 'Please enter your name.'); return; }
+  if (!email)   { showErr('bookErr', 'Please enter your email address.'); return; }
+  if (!isEmail(email)) { showErr('bookErr', 'Please enter a valid email address.'); return; }
+  if (!country) { showErr('bookErr', 'Please select your country.'); return; }
+  if (!msg)     { showErr('bookErr', 'Please describe your content challenge so I can prepare for the call.'); return; }
+
+  hideErr('bookErr');
+  setLoading('bookBtn','bookSpin','bookBtnTxt', true);
+
+  try {
+    const res = await fetch(FS, {
+      method : 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept'       : 'application/json'   // ← key: stops Formspree from redirecting
+      },
+      body: JSON.stringify({
+        _subject  : `📅 New booking request from ${name} — MediaStack`,
+        name, email,
+        business  : $('b_biz').value.trim() || '—',
+        country,
+        plan      : $('b_plan').value || 'Not specified',
+        message   : msg,
+        form_type : 'booking',
+      })
+    });
+
+    const json = await res.json().catch(() => ({}));
+
+    if (res.ok) {
+      // Hide form, show success — stay on same page
+      $('bookForm').style.display = 'none';
+      const ok = $('bookOk');
+      ok.style.display = 'flex';
+      ok.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      const errMsg = (json.errors && json.errors[0] && json.errors[0].message)
+        || 'Submission failed. Please email sujitgupta1347@gmail.com directly.';
+      showErr('bookErr', errMsg);
+      setLoading('bookBtn','bookSpin','bookBtnTxt', false, 'Book my free call →');
+    }
+  } catch (e) {
+    showErr('bookErr', 'Network error. Please check your connection or email sujitgupta1347@gmail.com directly.');
+    setLoading('bookBtn','bookSpin','bookBtnTxt', false, 'Book my free call →');
+  }
+}
+
+/* ── CONTACT FORM ── */
+async function submitContact() {
+  const name  = $('c_name').value.trim();
+  const email = $('c_email').value.trim();
+  const msg   = $('c_msg').value.trim();
+
+  if (!name)  { showErr('contactErr', 'Please enter your name.'); return; }
+  if (!email) { showErr('contactErr', 'Please enter your email address.'); return; }
+  if (!isEmail(email)) { showErr('contactErr', 'Please enter a valid email address.'); return; }
+  if (!msg)   { showErr('contactErr', 'Please write a message.'); return; }
+
+  hideErr('contactErr');
+  setLoading('contactBtn','contactSpin','contactBtnTxt', true);
+
+  try {
+    const res = await fetch(FS, {
+      method : 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept'       : 'application/json'   // ← stops redirect
+      },
+      body: JSON.stringify({
+        _subject  : `💬 New message from ${name} — MediaStack`,
+        name, email,
+        subject   : $('c_subject').value.trim() || 'Website contact',
+        message   : msg,
+        form_type : 'contact',
+      })
+    });
+
+    const json = await res.json().catch(() => ({}));
+
+    if (res.ok) {
+      $('contactForm').style.display = 'none';
+      const ok = $('contactOk');
+      ok.style.display = 'flex';
+      ok.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      const errMsg = (json.errors && json.errors[0] && json.errors[0].message)
+        || 'Submission failed. Please email sujitgupta1347@gmail.com directly.';
+      showErr('contactErr', errMsg);
+      setLoading('contactBtn','contactSpin','contactBtnTxt', false, 'Send message →');
+    }
+  } catch (e) {
+    showErr('contactErr', 'Network error. Please try again or email sujitgupta1347@gmail.com.');
+    setLoading('contactBtn','contactSpin','contactBtnTxt', false, 'Send message →');
+  }
+}
+
+/* ── Ctrl+Enter shortcut in textareas ── */
+$('b_msg').addEventListener('keydown', e => { if (e.key === 'Enter' && e.ctrlKey) submitBooking(); });
+$('c_msg').addEventListener('keydown', e => { if (e.key === 'Enter' && e.ctrlKey) submitContact(); });
+
+/* ── FAQ accordion ── */
+function toggleFaq(btn) {
+  const ans = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  // close all
+  document.querySelectorAll('.fq.open').forEach(b => {
+    b.classList.remove('open');
+    b.nextElementSibling.style.height = '0';
+  });
+  if (!isOpen) {
+    btn.classList.add('open');
+    ans.style.height = ans.scrollHeight + 'px';
+  }
+}
+
+/* ── Smooth scroll ── */
+function sScroll(selector) {
+  const el = document.querySelector(selector);
+  if (el) {
+    const top = el.getBoundingClientRect().top + window.scrollY - 68;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+  return false;
+}
+
+/* ── Prefill plan & scroll to booking ── */
+function prefillAndScroll(plan) {
+  const sel = $('b_plan');
+  for (let i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value === plan || sel.options[i].text === plan) {
+      sel.selectedIndex = i;
+      break;
+    }
+  }
+  sScroll('#booking');
+}
+
+/* ── Mobile menu ── */
+function toggleMenu() {
+  const m = $('mobMenu'), h = $('ham');
+  const open = m.classList.toggle('open');
+  h.classList.toggle('x', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeMenu() {
+  $('mobMenu').classList.remove('open');
+  $('ham').classList.remove('x');
+  document.body.style.overflow = '';
+}
+
+/* ── Nav border on scroll ── */
+window.addEventListener('scroll', () => {
+  $('nav').classList.toggle('on', window.scrollY > 12);
+}, { passive: true });
+
+/* ── Scroll reveal ── */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.rv').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
